@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: lightslategrey;
+}
+
+.logo {
+    background: lightslategrey;
+    width: 35px;
+    height: 35px;
+    margin-left: 15px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 100px 2fr 300px;
+    grid-template-rows: 100px 2fr 100px ;
+    grid-template-areas:
+    "empty header login"
+    "empty budgetform history"
+    "empty footer footer";
+}
+
+.header-container {
+    grid-area: header;
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    color: #ffffff;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 8px 8px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.modal-container {
+    padding: 15px;
+    background: lightslategrey;
+    grid-area: login;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 8px 8px;
+    top: 0;
+    z-index: 1000;
+
+}
+
+
+.empty {
+    grid-area: empty;
+    visibility: hidden;
+}
+
+.income-input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 25px;
+
+}
+
+.budgetform {
+    resize: block;
+    grid-area: budgetform;
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f0f4f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.budgetform label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.budgetform input {
+    width: 50%;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.budgetform input:focus {
+    background-color: lightblue;
+}
+
+.budgetform .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.budgetform .einnahmen {
+    color: forestgreen;
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.budgetform .ausgaben{
+    color: indianred;
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+}
+
+
+.history {
+    grid-area: history;
+    background: #e2e8f0;
+}
+
+.footer {
+    grid-area: footer;
+    background: lightslategrey;
+    color: #ffffff;
+}
+
+.button {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    color: #ffffff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.button:hover {
+    background: linear-gradient(135deg, #000dff 0%, #6b73ff 100%);
+    cursor: pointer;
+}
+
+.button:focus {
+    outline: none;
+}
