@@ -112,6 +112,7 @@ body {
     color: indianred;
     font-family: "Roboto", sans-serif;
     font-weight: bold;
+    font-size: x-large;
 }
 
 
@@ -137,6 +138,45 @@ body {
     cursor: pointer;
     transition: background 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip-container{
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-container .tooltip {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container .tooltip::after {
+    content: "HALLO TEST";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
 
