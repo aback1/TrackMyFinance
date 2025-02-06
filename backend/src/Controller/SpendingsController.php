@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class FinanceController
+class SpendingsController
 {
 
 }
