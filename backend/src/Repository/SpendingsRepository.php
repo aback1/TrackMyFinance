@@ -2,7 +2,17 @@
 
 namespace App\Repository;
 
-class SpendingsRepository
-{
+use App\Entity\Spendings;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Spendings>
+ */
+class SpendingsRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Spendings::class);
+    }
 }

@@ -1,12 +1,21 @@
+import { useGetSavingsQuery } from './historyApi.js';
+import HistoryItem from './HistoryItem.jsx';
+import { useSelector } from 'react-redux';
+
 export default function History() {
+  const userName = useSelector((state) => state.login?.userName) || '';
+  const {
+    data: spendingsHistory,
+    error,
+    isLoading,
+  } = useGetSavingsQuery(userName, { skip: !userName });
+
   return (
     <div className="history">
-      <p>Test</p>
-      <p>Test</p>
-      <p>Test</p>
-      <p>Test</p>
-      <p>Test</p>
-      <p>Test</p>
+      <h2 style={{ marginLeft: '20px' }}>Ihre Finanzhistorie</h2>
+      {spendingsHistory?.map((spending) => (
+        <HistoryItem key={spending.month} spending={spending} />
+      ))}
     </div>
   );
 }

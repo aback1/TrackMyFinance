@@ -4,9 +4,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useEffect, useState } from 'react';
 import Icon from '../../components/Icon.jsx';
+import { useSelector } from 'react-redux';
+import { usePostSavingsMutation } from '../History/historyApi.js';
 
 export default function BudgetForm() {
   const [month, setMonth] = useState(new Date());
+  const [formattedMonth, setFormattedMonth] = useState('02-2025');
   const [income, setIncome] = useState(0);
   const [rent, setRent] = useState(0);
   const [sideCosts, setSideCosts] = useState(0);
@@ -16,6 +19,11 @@ export default function BudgetForm() {
   const [insuranceCosts, setInsuranceCosts] = useState(0);
   const [monthlySavingsCosts, setMonthlySavingsCosts] = useState(0);
   const [saldo, setSaldo] = useState(0);
+
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const userName = useSelector((state) => state.login.userName);
+
+  const [postSpendings] = usePostSavingsMutation();
 
   const textArr = [
     'Das Nettoeinkommen bezieht sich auf Ihr Gehalt sowie alle Nebeneinkünfte nach Abzug der Steuern. Geben Sie den Betrag an, der Ihnen monatlich tatsächlich ausgezahlt wird.Berücksichtigen Sie auch regelmäßige zusätzliche Einnahmen wie Boni oder Provisionen.Falls Sie den exakten Wert nicht kennen, schätzen Sie bitte den monatlichen Nettobetrag ',
@@ -46,6 +54,50 @@ export default function BudgetForm() {
       'Falls Sie sich unsicher sind, wählen Sie bitte einen Betrag, der realistisch zu Ihren finanziellen Zielen passt.',
   ];
 
+  const handleUpdateMonth = (date) => {
+    setMonth(date);
+    let formattedDate = date.toISOString().slice(0, 7);
+    let monthSubString = formattedDate.substring(5, 7);
+    let yearSubString = formattedDate.substring(0, 4);
+    setFormattedMonth(`${monthSubString}-${yearSubString}`);
+  };
+
+  const handleSubmitSpendings = async (e) => {
+    e.preventDefault();
+    if (!isLoggedIn) {
+      alert(
+        'Sie müssen eingeloggt sein, damit Sie ihre Ausgaben tracken können!'
+      );
+      return null;
+    }
+    try {
+      let response;
+      console.log(formattedMonth);
+      const newSpendings = {
+        username: userName,
+        month: formattedMonth,
+        income,
+        rentcosts: rent,
+        sidecosts: sideCosts,
+        foodanddrinkscosts: foodAndDrinksCosts,
+        hobbycosts: hobbyCosts,
+        savingscosts: monthlySavingsCosts,
+        mobilitycosts: mobilityCosts,
+        insurancecosts: insuranceCosts,
+      };
+      response = await postSpendings(newSpendings).unwrap();
+      if (response.ok) {
+        alert('Daten erfolgreich übermittelt.');
+      }
+    } catch (error) {
+      alert(error?.data.error[0]);
+    }
+  };
+
+  //UseEffect to compute the difference between the income and all the expenses
+  //a different approach having all the state in the store and subscribing to it with a useSelectorHook
+  //would result in rerenders for each calling of the dispatch function, so it would yield the same result
+  //as a useEffect hook.
   useEffect(() => {
     const combinedCosts =
       rent +
@@ -65,24 +117,25 @@ export default function BudgetForm() {
     insuranceCosts,
     monthlySavingsCosts,
     saldo,
+    month,
   ]);
-
   return (
     <div className="budgetform">
       <div className="header">
         <h2>Geben Sie ihre monatlichen Ausgaben an</h2>
         <div className="income-input-container">
-          <label style={{ marginLeft: 200 }}>Zeitraum:</label>
+          <label>Zeitraum:</label>
           <DatePicker
+            wrapperClassName="datePicker"
             selected={month}
             dateFormat="MM/yyyy"
-            onChange={(date) => setMonth(date)}
+            onChange={(date) => handleUpdateMonth(date)}
             showMonthYearPicker
             placeHolderText="Select a month"
           />
         </div>
       </div>
-      <form>
+      <form onSubmit={(e) => handleSubmitSpendings(e)} id="savingsform">
         <label>Netto Einkommen *</label>
         <input
           type="text"
@@ -200,7 +253,9 @@ export default function BudgetForm() {
       </form>
       <p>* Pflichtfelder</p>
       <p>Saldo: {saldo}€</p>
-      <Button type="submit">Speichern</Button>
+      <Button type="submit" formId="savingsform">
+        Speichern
+      </Button>
     </div>
   );
 }

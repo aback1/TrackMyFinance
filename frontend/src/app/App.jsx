@@ -4,6 +4,7 @@ import Footer from '../components/Footer.jsx';
 import BudgetForm from '../features/BudgetForm/BudgetForm.jsx';
 import History from '../features/History/History.jsx';
 import LoginModal from '../features/Login/LoginModal.jsx';
+import SpendingComparison from '../features/Comparison/SpendingComparison.jsx';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
               <Header />
               <LoginModal />
               <BudgetForm />
+              <SpendingComparison />
               <History />
               <Footer />
             </div>

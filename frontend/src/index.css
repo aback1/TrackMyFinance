@@ -6,20 +6,49 @@ body {
 }
 
 .logo {
-    background: lightslategrey;
     width: 35px;
     height: 35px;
     margin-left: 15px;
 }
-
 .container {
     display: grid;
-    grid-template-columns: 100px 2fr 300px;
-    grid-template-rows: 100px 2fr 100px ;
+    grid-template-columns: 100px 1.65fr 1fr 300px; /* Adjusted to include SpendingComparison */
+    grid-template-rows: 100px 2fr 100px;
     grid-template-areas:
-    "empty header login"
-    "empty budgetform history"
-    "empty footer footer";
+    "empty header header login"
+    "empty budgetform spendingcomparison history"
+    "empty footer footer footer";
+    background-color: #f0f4f8;
+    border-radius: 0;
+}
+
+.spending-comparison {
+    grid-area: spendingcomparison;
+    background-color: #f0f4f8;
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+.budgetform {
+    grid-area: budgetform;
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+    padding: 20px;
+    background-color: #f0f4f8;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.datePicker {
+    width: 100%;
+}
+.react-datepicker__input-container{
+    display: block;
+    padding: 40px;
+    width: 150%
+
 }
 
 .header-container {
@@ -38,19 +67,32 @@ body {
 }
 
 .modal-container {
+    position: relative;
     padding: 15px;
-    background: lightslategrey;
-    grid-area: login;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 8px 8px;
-    top: 0;
-    z-index: 1000;
-
+    background: #f0f4f8;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
+.modal-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: #f0f4f8;
+    border-radius: 8px;
+}
+
+.modal-container input[type="password"] {
+    letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.modal-container h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
 .empty {
     grid-area: empty;
@@ -65,7 +107,27 @@ body {
 
 }
 
-.budgetform {
+.history-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f0f4f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.history-item h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.history-item p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+.loginform {
     resize: block;
     grid-area: budgetform;
     font-family: 'Roboto', sans-serif;
@@ -118,12 +180,14 @@ body {
 
 .history {
     grid-area: history;
-    background: #e2e8f0;
+    background: #f0f4f8;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .footer {
     grid-area: footer;
-    background: lightslategrey;
+    background: #f0f4f8;
     color: #ffffff;
 }
 
@@ -187,3 +251,38 @@ body {
 .button:focus {
     outline: none;
 }
+
+.alert {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error,
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
