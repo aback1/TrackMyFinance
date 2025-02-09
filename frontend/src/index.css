@@ -3,6 +3,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     background: lightslategrey;
+    font-weight: bold;
 }
 
 .logo {
@@ -12,7 +13,7 @@ body {
 }
 .container {
     display: grid;
-    grid-template-columns: 100px 1.65fr 1fr 300px; /* Adjusted to include SpendingComparison */
+    grid-template-columns: 80px 1.65fr 1fr 280px; /* Adjusted to include SpendingComparison */
     grid-template-rows: 100px 2fr 100px;
     grid-template-areas:
     "empty header header login"
@@ -46,9 +47,14 @@ body {
 }
 .react-datepicker__input-container{
     display: block;
-    padding: 40px;
-    width: 150%
+    padding-right: 70px;
+    padding-left: 10px;
+    resize: block;
 
+}
+
+.datePickerContainer {
+    width: 100%;
 }
 
 .header-container {
@@ -67,7 +73,9 @@ body {
 }
 
 .modal-container {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     padding: 15px;
     background: #f0f4f8;
     border-radius: 8px;
@@ -99,11 +107,9 @@ body {
     visibility: hidden;
 }
 
-.income-input-container {
+.date-input-container {
     display: flex;
     align-items: center;
-    position: relative;
-    gap: 25px;
 
 }
 
@@ -177,6 +183,13 @@ body {
     font-size: x-large;
 }
 
+/*Hacky solution, i know :) */
+.budgetform .login {
+    color: #0d5aa7;
+    font-family: "Roboto", sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+}
 
 .history {
     grid-area: history;

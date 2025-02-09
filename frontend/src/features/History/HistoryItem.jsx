@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from '../../components/Button.jsx';
-import { useSelector } from 'react-redux';
+import { createDispatchHook, useDispatch, useSelector } from 'react-redux';
 import { useDeleteSavingsMutation } from './historyApi.js';
+import { addComparison } from '../Comparison/comparisonSlice.js';
 
 export default function HistoryItem({ spending }) {
   const {
@@ -17,8 +18,8 @@ export default function HistoryItem({ spending }) {
   } = spending;
 
   const [deleteSpending] = useDeleteSavingsMutation();
-
   const userName = useSelector((state) => state.login.userName);
+  const dispatch = useDispatch();
 
   const handleDeleteHistoryItem = async (month, userName) => {
     try {
@@ -35,8 +36,19 @@ export default function HistoryItem({ spending }) {
     }
   };
 
-  const handleRestoreHistoryItem = (month) => {
-    console.log('restore history');
+  const handleRestoreHistoryItem = () => {
+    const newComparison = {
+      month,
+      income,
+      rentcosts,
+      sidecosts,
+      foodanddrinkscosts,
+      hobbycosts,
+      savingscosts,
+      mobilitycosts,
+      insurancecosts,
+    };
+    dispatch(addComparison(newComparison));
   };
 
   return (

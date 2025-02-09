@@ -45,12 +45,12 @@ export default function LoginForm() {
 
   return (
     <>
-      <form className="budgetform">
+      <form className="budgetform login">
         <h2>Account Management</h2>
         <label>Benutzername *</label>
         <input
           type="text"
-          className="ausgaben"
+          className="login"
           value={userName}
           onChange={(e) => handleUpdateUserName(e)}
           style={{ width: '100%' }}
@@ -58,7 +58,7 @@ export default function LoginForm() {
         <label>Passwort *</label>
         <input
           type="password"
-          className="ausgaben"
+          className="login"
           value={password}
           onChange={(e) => handleUpdatePassword(e)}
           style={{ width: '100%' }}
@@ -71,10 +71,7 @@ export default function LoginForm() {
             marginTop: '20px',
           }}
         >
-          <div
-            style={{ display: 'flex', gap: '10px' }}
-            className="alert alert-info"
-          >
+          <div style={{ display: 'flex', gap: '10px' }}>
             <Button
               type="submit"
               onClick={(e) => {

@@ -122,8 +122,8 @@ export default function BudgetForm() {
   return (
     <div className="budgetform">
       <div className="header">
-        <h2>Geben Sie ihre monatlichen Ausgaben an</h2>
-        <div className="income-input-container">
+        <h2>Geben Sie ihre monatlichen Einnahmen und Ausgaben an</h2>
+        <div className="date-input-container">
           <label>Zeitraum:</label>
           <DatePicker
             wrapperClassName="datePicker"
