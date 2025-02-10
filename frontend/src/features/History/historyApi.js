@@ -21,6 +21,10 @@ export const historyApi = createApi({
         body: JSON.stringify(savings),
       }),
       invalidatesTags: ['savings'],
+      transformResponse: (response) => ({
+        ...response,
+        ok: true,
+      }),
     }),
     deleteSavings: builder.mutation({
       query: (spending) => ({

@@ -4,10 +4,23 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useEffect, useState } from 'react';
 import Icon from '../../components/Icon.jsx';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usePostSavingsMutation } from '../History/historyApi.js';
+import {
+  addFoodAndDrinksCosts,
+  addHobbyCosts,
+  addIncome,
+  addInsuranceCosts,
+  addMobilityCosts,
+  addMonth,
+  addRentCosts,
+  addSavingsCosts,
+  addSideCosts,
+  addSpendings,
+} from './budgetSlice.js';
 
 export default function BudgetForm() {
+  // I keep the local state in here, because it is faster to render from local state
   const [month, setMonth] = useState(new Date());
   const [formattedMonth, setFormattedMonth] = useState('02-2025');
   const [income, setIncome] = useState(0);
@@ -22,6 +35,7 @@ export default function BudgetForm() {
 
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
   const userName = useSelector((state) => state.login.userName);
+  const dispatch = useDispatch();
 
   const [postSpendings] = usePostSavingsMutation();
 
@@ -60,6 +74,7 @@ export default function BudgetForm() {
     let monthSubString = formattedDate.substring(5, 7);
     let yearSubString = formattedDate.substring(0, 4);
     setFormattedMonth(`${monthSubString}-${yearSubString}`);
+    dispatch(addMonth(`${monthSubString}-${yearSubString}`));
   };
 
   const handleSubmitSpendings = async (e) => {
@@ -88,6 +103,7 @@ export default function BudgetForm() {
       response = await postSpendings(newSpendings).unwrap();
       if (response.ok) {
         alert('Daten erfolgreich übermittelt.');
+        dispatch(addSpendings(newSpendings));
       }
     } catch (error) {
       alert(error?.data.error[0]);
@@ -144,7 +160,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setIncome(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setIncome(numericValue);
+            dispatch(addIncome(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -159,7 +177,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setRent(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setRent(numericValue);
+            dispatch(addRentCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -173,7 +193,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setSideCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setSideCosts(numericValue);
+            dispatch(addSideCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -187,7 +209,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setFoodAndDrinksCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setFoodAndDrinksCosts(numericValue);
+            dispatch(addFoodAndDrinksCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -201,7 +225,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setMobilityCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setMobilityCosts(numericValue);
+            dispatch(addMobilityCosts(numericValue));
           }}
         />
 
@@ -216,7 +242,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setHobbyCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setHobbyCosts(numericValue);
+            dispatch(addHobbyCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -230,7 +258,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setInsuranceCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setInsuranceCosts(numericValue);
+            dispatch(addInsuranceCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
@@ -244,7 +274,9 @@ export default function BudgetForm() {
           onChange={(e) => {
             // Regex to remove non-numeric characters and € symbol
             const rawValue = e.target.value.replace(/[^0-9]/g, '');
-            setMonthlySavingsCosts(Number(rawValue));
+            const numericValue = Number(rawValue);
+            setMonthlySavingsCosts(numericValue);
+            dispatch(addSavingsCosts(numericValue));
           }}
         />
         <div className="tooltip-container">
