@@ -20,6 +20,7 @@ class SpendingsController extends AbstractController
         ValidatorInterface $validator
     ): JsonResponse
     {
+        //Check if all the required fields are entered in the request object.
         $data = json_decode($request->getContent(), true);
         if (!$data || !isset($data["month"]) || !isset($data["income"]) || !isset($data["foodanddrinkscosts"]) || !isset($data["sidecosts"])) {
             return new JsonResponse(["error" => "Missing required fields"], 400);
