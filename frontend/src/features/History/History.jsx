@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 export default function History() {
   const userName = useSelector((state) => state.login?.userName) || '';
+  const isLoggedIn = useSelector((state) => state.login?.isLoggedIn) || false;
   const {
     data: spendingsHistory,
     error,
@@ -11,11 +12,15 @@ export default function History() {
   } = useGetSavingsQuery(userName, { skip: !userName });
 
   return (
-    <div className="history">
-      <h2 style={{ marginLeft: '20px' }}>Ihre Finanzhistorie</h2>
-      {spendingsHistory?.map((spending) => (
-        <HistoryItem key={spending.month} spending={spending} />
-      ))}
-    </div>
+    <>
+      {isLoggedIn && (
+        <div className="history">
+          <h2 style={{ marginLeft: '20px' }}>Ihre Finanzhistorie</h2>
+          {spendingsHistory?.map((spending) => (
+            <HistoryItem key={spending.month} spending={spending} />
+          ))}
+        </div>
+      )}
+    </>
   );
 }

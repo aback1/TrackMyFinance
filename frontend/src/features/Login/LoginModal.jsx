@@ -17,7 +17,7 @@ export default function LoginModal() {
   return (
     <div className="modal-container">
       {!showLoginForm && !isLoggedIn ? (
-        <Button type="button" onClick={handleShowLoginForm}>
+        <Button type="button" className="button" onClick={handleShowLoginForm}>
           Anmelden oder Registrieren
         </Button>
       ) : showLoginForm && !isLoggedIn ? (

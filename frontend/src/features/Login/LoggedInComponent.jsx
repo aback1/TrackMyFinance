@@ -13,6 +13,14 @@ export default function () {
   };
 
   const userName = useSelector((state) => state.login.userName);
+
+  let shortendedUserName = userName;
+  //if the userName is too long it gets shortend here.
+  if (userName.length >= 13) {
+    shortendedUserName = userName.slice(0, 12) + '.';
+    console.log(shortendedUserName);
+  }
+
   return (
     <div
       style={{
@@ -24,8 +32,10 @@ export default function () {
       }}
     >
       <Icon name={'person'} text={''}></Icon>
-      <p>{userName}</p>
-      <Button onClick={handleLogout}>Logout</Button>
+      <p>{shortendedUserName}</p>
+      <Button className="logout-button" onClick={handleLogout}>
+        Logout
+      </Button>
     </div>
   );
 }

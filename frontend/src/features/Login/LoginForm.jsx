@@ -7,6 +7,7 @@ import {
   setIsLoggedIn,
 } from './loginSlice.js';
 import { useLoginUserMutation, useRegisterUserMutation } from './loginApi.js';
+import LoadingSpinner from '../../components/LoadingSpinner.jsx';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -15,8 +16,9 @@ export default function LoginForm() {
 
   const handleUpdateUserName = (e) => dispatch(setUserName(e.target.value));
   const handleUpdatePassword = (e) => dispatch(setPassword(e.target.value));
-  const [loginUser] = useLoginUserMutation();
-  const [registerUser] = useRegisterUserMutation();
+  const [loginUser, { isLoading: isLoggingIn }] = useLoginUserMutation();
+  const [registerUser, { isLoading: isRegistering }] =
+    useRegisterUserMutation();
 
   const handleSubmit = async (action) => {
     const newCredentials = {
@@ -27,19 +29,26 @@ export default function LoginForm() {
       let response;
       if (action === 'register') {
         response = await registerUser(newCredentials).unwrap();
-        if (response.ok) {
+        if (response.status === 'User created successfully') {
           alert(
             'Die Registrierung war erfolgreich Sie können sich jetzt mit ihren gewählten Benuzernahmen und Passwort anmelden.'
           );
         }
-        console.log('Registration successful');
+        console.log(response.status);
       } else if (action === 'login') {
         response = await loginUser(newCredentials).unwrap();
-        dispatch(setIsLoggedIn(true));
-        console.log('Login successful', response);
+
+        //the lexik jwt sends a token if the login was successful.
+        if (response.token) {
+          alert('Login erfolgreich.');
+          dispatch(setIsLoggedIn(true));
+          dispatch(setShowLoginForm(false));
+        }
       }
     } catch (error) {
-      console.log(`${action} failed`, error);
+      console.log(response.token);
+      console.log(error);
+      alert(error?.data?.message);
     }
   };
 
@@ -72,34 +81,46 @@ export default function LoginForm() {
           }}
         >
           <div style={{ display: 'flex', gap: '10px' }}>
-            <Button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit('login');
-              }}
-            >
-              Login
-            </Button>
+            {!isLoggingIn ? (
+              <Button
+                type="submit"
+                className="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit('login');
+                }}
+              >
+                Login
+              </Button>
+            ) : (
+              <LoadingSpinner />
+            )}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <Button
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit('register');
-              }}
-              style={{
-                background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
-              }}
-            >
-              Registrieren
-            </Button>
+            {!isRegistering ? (
+              <Button
+                type="submit"
+                className="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubmit('register');
+                }}
+                style={{
+                  background:
+                    'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
+                }}
+              >
+                Registrieren
+              </Button>
+            ) : (
+              <LoadingSpinner />
+            )}
           </div>
         </div>
         <div>
           <Button
             type="button"
+            className="button"
             onClick={() => dispatch(setShowLoginForm(false))}
             style={{
               background: 'linear-gradient(135deg, #ff6b6b 0%, #ff0000 100%)',

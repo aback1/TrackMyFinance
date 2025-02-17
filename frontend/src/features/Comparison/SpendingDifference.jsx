@@ -4,140 +4,86 @@ export default function SpendingDifference() {
   const comparisonFinance = useSelector((state) => state.comparison);
   const currentFinance = useSelector((state) => state.budget);
 
-  const {
-    income,
-    rentcosts,
-    sidecosts,
-    foodanddrinkscosts,
-    hobbycosts,
-    savingscosts,
-    mobilitycosts,
-    insurancecosts,
-  } = comparisonFinance;
-
-  const {
-    income: currentIncome,
-    rentcosts: currentRentCosts,
-    sidecosts: currentSideCosts,
-    foodanddrinkscosts: currentFoodAndDrinksCosts,
-    hobbycosts: currentHobbyCosts,
-    savingscosts: currentSavingsCosts,
-    mobilitycosts: currentMobilityCosts,
-    insurancecosts: currentInsuranceCosts,
-  } = currentFinance;
-
-  const calculatePercentageDifference = (current, previous) => {
-    if (previous === 0) return '';
-    const difference = ((current - previous) / previous) * 100;
-    const differenceRounded = difference.toFixed(2);
-    return differenceRounded >= 0 ? '+' + differenceRounded : differenceRounded;
+  // Helper function to calculate percentage of income
+  const calculatePercentage = (value, income) => {
+    return income > 0 ? ((value / income) * 100).toFixed(2) + '%' : '-';
   };
 
-  const getDifferenceStyle = (difference) => {
-    if (difference === '') return {};
-    return {
-      color: difference >= 0 ? 'red' : 'green',
-    };
+  //improvement green worsening red
+  const getValueStyle = (current, comparison) => {
+    if (current > comparison) return { color: 'red' };
+    if (current < comparison) return { color: 'green' };
+    return {};
   };
 
-  const getIncomeStyle = (difference) => {
-    if (difference === '') return {};
-    return {
-      color: difference >= 0 ? 'green' : 'red',
-    };
-  };
+  const categories = [
+    { key: 'rentcosts', label: 'Miete' },
+    { key: 'sidecosts', label: 'Nebenkosten' },
+    { key: 'foodanddrinkscosts', label: 'Essen & Trinken' },
+    { key: 'hobbycosts', label: 'Hobbies & Freizeit' },
+    { key: 'savingscosts', label: 'Sparen' },
+    { key: 'mobilitycosts', label: 'Mobilität' },
+    { key: 'insurancecosts', label: 'Versicherungen' },
+  ];
 
   return (
-    <div style={{ fontSize: 'larger' }}>
-      <h2>Vergleich mit aktuellen Ausgaben</h2>
-      <p>
-        Einkommen Unterschied:{' '}
-        <span
-          style={getIncomeStyle(
-            calculatePercentageDifference(currentIncome, income)
-          )}
-        >
-          {calculatePercentageDifference(currentIncome, income)}%
-        </span>
-      </p>
-      <p>
-        Miete Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentRentCosts, rentcosts)
-          )}
-        >
-          {calculatePercentageDifference(currentRentCosts, rentcosts)}%
-        </span>
-      </p>
-      <p>
-        Nebenkosten Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentSideCosts, sidecosts)
-          )}
-        >
-          {calculatePercentageDifference(currentSideCosts, sidecosts)}%
-        </span>
-      </p>
-      <p>
-        Essen und Trinken Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(
-              currentFoodAndDrinksCosts,
-              foodanddrinkscosts
-            )
-          )}
-        >
-          {calculatePercentageDifference(
-            currentFoodAndDrinksCosts,
-            foodanddrinkscosts
-          )}
-          %
-        </span>
-      </p>
-      <p>
-        Hobbies und Freizeit Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentHobbyCosts, hobbycosts)
-          )}
-        >
-          {calculatePercentageDifference(currentHobbyCosts, hobbycosts)}%
-        </span>
-      </p>
-      <p>
-        Sparen Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentSavingsCosts, savingscosts)
-          )}
-        >
-          {calculatePercentageDifference(currentSavingsCosts, savingscosts)}%
-        </span>
-      </p>
-      <p>
-        Mobilität Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentMobilityCosts, mobilitycosts)
-          )}
-        >
-          {calculatePercentageDifference(currentMobilityCosts, mobilitycosts)}%
-        </span>
-      </p>
-      <p>
-        Versicherungen Unterschied:{' '}
-        <span
-          style={getDifferenceStyle(
-            calculatePercentageDifference(currentInsuranceCosts, insurancecosts)
-          )}
-        >
-          {calculatePercentageDifference(currentInsuranceCosts, insurancecosts)}
-          %
-        </span>
-      </p>
+    <div className="comparison-table">
+      <h2>Monatlicher Vergleich</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th>Aktueller Monat</th>
+            <th>Vergleichsmonat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Einkommen</td>
+            <td style={{ color: 'green' }}>{currentFinance.income}€</td>
+            <td style={{ color: 'green' }}>{comparisonFinance.income}€</td>
+          </tr>
+
+          {categories.map(({ key, label }) => (
+            <tr key={key}>
+              <td>{label}</td>
+              <td
+                style={getValueStyle(
+                  currentFinance[key],
+                  comparisonFinance[key]
+                )}
+              >
+                {currentFinance[key]}€
+                <div className="percentage">
+                  (
+                  {calculatePercentage(
+                    currentFinance[key],
+                    currentFinance.income
+                  )}
+                  )
+                </div>
+              </td>
+              <td
+                style={getValueStyle(
+                  comparisonFinance[key],
+                  currentFinance[key]
+                )}
+              >
+                {comparisonFinance[key]}€
+                <div className="percentage">
+                  (
+                  {calculatePercentage(
+                    comparisonFinance[key],
+                    comparisonFinance.income
+                  )}
+                  )
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: lightslategrey;
+    background: #f0f4f8;
     font-weight: bold;
 }
 
@@ -11,16 +11,17 @@ body {
     height: 35px;
     margin-left: 15px;
 }
+
 .container {
     display: grid;
-    grid-template-columns: 80px 1.65fr 1fr 280px; /* Adjusted to include SpendingComparison */
-    grid-template-rows: 100px 2fr 100px;
+    grid-template-columns: 80px 1fr 1fr 280px; /* Adjusted to allocate space more efficiently */
+    grid-template-rows: 100px 2fr ;
     grid-template-areas:
     "empty header header login"
-    "empty budgetform spendingcomparison history"
-    "empty footer footer footer";
+    "empty budgetform spendingcomparison history";
     background-color: #f0f4f8;
     border-radius: 0;
+    gap: 20px;
 }
 
 .spending-comparison {
@@ -48,7 +49,8 @@ body {
 .react-datepicker__input-container{
     display: block;
     padding-right: 70px;
-    padding-left: 10px;
+    padding-left: 70px;
+    width: 40px;
     resize: block;
 
 }
@@ -62,6 +64,7 @@ body {
     background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
     color: #ffffff;
     padding: 20px;
+    gap: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,6 +83,11 @@ body {
     background: #f0f4f8;
     border-radius: 8px;
     transition: all 0.3s ease;
+}
+
+.custom-link {
+    text-decoration: none;
+    color: inherit; /* Inherits the color from the parent */
 }
 
 .modal-container form {
@@ -110,7 +118,6 @@ body {
 .date-input-container {
     display: flex;
     align-items: center;
-
 }
 
 .history-item {
@@ -199,7 +206,12 @@ body {
 }
 
 .footer {
-    grid-area: footer;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
     background: #f0f4f8;
     color: #ffffff;
 }
@@ -210,6 +222,26 @@ body {
     padding: 15px 30px;
     border: none;
     border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.button:focus {
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    position: fixed;
+    top: 10px;
+    z-index: 1000;
+    right: 10px;
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
@@ -231,7 +263,7 @@ body {
     color: #fff;
     text-align: left;
     border-radius: 6px;
-    padding: 10px;
+    padding-top: 20px;
     position: absolute;
     z-index: 1;
     left: 105%;
@@ -263,40 +295,6 @@ body {
 
 .button:focus {
     outline: none;
-}
-
-.alert {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    padding: 15px 20px;
-    margin: 20px 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.alert-success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
-}
-
-.alert-error,
-.alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-.alert-warning {
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    color: #856404;
-}
-
-.alert-info {
-    background-color: #d1ecf1;
-    border: 1px solid #bee5eb;
-    color: #0c5460;
 }
 
 .loading-screen {
@@ -342,4 +340,256 @@ body {
 .spending-comparison .negative {
     color: red;
 }
+
+/* Shared CSS for both components */
+.contact-section,
+.data-protection-section {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+}
+
+.section-heading {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.25;
+}
+
+.content-section {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: #374151;
+}
+
+.content-section p {
+    margin-bottom: 1rem;
+}
+
+.content-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+}
+
+.content-link {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.content-link:hover {
+    text-decoration: underline;
+}
+
+.content-section strong {
+    font-weight: 600;
+}
+
+.content-section ul {
+    list-style-type: disc;
+    padding-left: 1.25rem;
+    margin: 1rem 0;
+}
+
+.content-section li {
+    margin-bottom: 0.5rem;
+}
+
+/* CSS für Impressum und Datenschutzerklärung */
+.data-protection-section .content-section {
+    max-width: 800px;
+}
+
+.data-protection-section .content-heading:first-of-type {
+    margin-top: 0;
+}
+
+@media (max-width: 640px) {
+    .section-heading {
+        font-size: 1.875rem;
+    }
+
+    .content-section {
+        font-size: 1rem;
+    }
+
+    .content-heading {
+        font-size: 1.25rem;
+    }
+}
+
+/* CSS für Pie Charts */
+.charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.chart-wrapper {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-width: 250px;
+    margin: 1rem;
+}
+
+.chart-wrapper h4 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.source-link {
+    display: block;
+    margin-top: 1rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.source-link:hover {
+    text-decoration: underline;
+}
+
+.time-period {
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.total-difference {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.comparison-table {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-table h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.percentage {
+    font-size: 0.9em;
+    color: #666;
+}
+
+td:first-child {
+    font-weight: bold;
+}
+
+td {
+    position: relative;
+}
+
+tbody tr:hover {
+    background: #f1f1f1;
+}
+
+td div.percentage {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
+}
+
+td:nth-child(2), td:nth-child(3) {
+    font-weight: bold;
+}
+
+td:nth-child(2) {
+    color: green;
+}
+
+td:nth-child(3) {
+    color: red;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+/*About section css */
+.about-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.about-container h2 {
+    font-size: 1.8rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.about-container p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.about-container strong {
+    color: #2c3e50; /* Dunkelblau für Hervorhebungen */
+}
+
+
+@media (max-width: 768px) {
+    .charts-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chart-wrapper {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+
+
 

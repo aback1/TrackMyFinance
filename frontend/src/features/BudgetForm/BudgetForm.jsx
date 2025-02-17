@@ -18,6 +18,7 @@ import {
   addSideCosts,
   addSpendings,
 } from './budgetSlice.js';
+import LoadingSpinner from '../../components/LoadingSpinner.jsx';
 
 export default function BudgetForm() {
   // I keep the local state in here, because it is faster to render from local state
@@ -37,7 +38,7 @@ export default function BudgetForm() {
   const userName = useSelector((state) => state.login.userName);
   const dispatch = useDispatch();
 
-  const [postSpendings] = usePostSavingsMutation();
+  const [postSpendings, { isLoading }] = usePostSavingsMutation();
 
   const textArr = [
     'Das Nettoeinkommen bezieht sich auf Ihr Gehalt sowie alle Nebeneinkünfte nach Abzug der Steuern. Geben Sie den Betrag an, der Ihnen monatlich tatsächlich ausgezahlt wird.Berücksichtigen Sie auch regelmäßige zusätzliche Einnahmen wie Boni oder Provisionen.Falls Sie den exakten Wert nicht kennen, schätzen Sie bitte den monatlichen Nettobetrag ',
@@ -285,9 +286,13 @@ export default function BudgetForm() {
       </form>
       <p>* Pflichtfelder</p>
       <p>Saldo: {saldo}€</p>
-      <Button type="submit" formId="savingsform">
-        Speichern
-      </Button>
+      {!isLoading ? (
+        <Button type="submit" formId="savingsform" className="button">
+          Speichern
+        </Button>
+      ) : (
+        <LoadingSpinner />
+      )}
     </div>
   );
 }

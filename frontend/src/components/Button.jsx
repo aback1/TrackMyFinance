@@ -1,9 +1,10 @@
-export default function Button({ onClick, children, type, formId }) {
+export default function Button({ onClick, children, type, formId, className }) {
   return (
     <button
-      className="button"
+      className={className}
       type={type}
       onClick={onClick}
+      //formID is needed for the linking of the submit form of the Login and Budget Form
       {...(formId ? { form: formId } : {})}
     >
       {children}
