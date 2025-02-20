@@ -1,0 +1,98 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4); /* Greyish veil */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-container {
+    /* Match the "card" look from .transaction-item/.transactions-section */
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 400px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    font-family: sans-serif;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.transaction-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+    background-color: #fff;
+    font-size: 0.9rem;
+    color: #333;
+    /* Subtle inner shadow for a "recessed" look */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Buttons row, similar to the .transaction-top layout */
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.cancel-btn,
+.submit-btn {
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.cancel-btn {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.submit-btn {
+    background-color: #1b1b1b;
+    color: #fff;
+}
+
+/* Add focus styles to match the modern look */
+.submit-btn:focus,
+.cancel-btn:focus,
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #1b1b1b;
+    box-shadow: 0 0 0 2px rgba(100, 200, 245, 0.2);
+}

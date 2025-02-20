@@ -1,0 +1,46 @@
+/* src/styles/ActionsBar.css */
+
+.actions-cards {
+    display: flex;
+    gap: 16px;
+    /* On smaller screens, stack them vertically if needed */
+    flex-wrap: wrap;
+}
+
+.action-card {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    min-width: 220px; /* ensures each card is at least as wide as the summary cards */
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #E6F4FF;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+}
+
+.action-card h4 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.action-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+}
