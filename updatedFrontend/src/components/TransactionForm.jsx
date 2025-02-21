@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import "../styles/TransactionForm.css";
+import {useAddTransactionMutation} from "../features/transaction/transactionApi.js";
+import SmallSpinner from "./SmallSpinner.jsx";
 
 export default function TransactionForm({ type, onClose }) {
     const [amount, setAmount] = useState("");
     const [method, setMethod] = useState("credit card");
     const [date, setDate] = useState("");
+    const userName = "John Doe";
+    const [addPayment, {error, isLoading}] = useAddTransactionMutation(userName);
 
     // For description (income/expense) or username (transfer)
     const [description, setDescription] = useState("");
     const [username, setUsername] = useState("");
 
-    // Helper: auto-format "13022024" -> "13.02.2024"
+    // format "13022024" -> "13.02.2024"
     const formatDateInput = (value) => {
         const digits = value.replace(/\D/g, "");
 
@@ -35,34 +39,6 @@ export default function TransactionForm({ type, onClose }) {
         setDate(formatDateInput(e.target.value));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // If it's a "transfer," we store it as an expense internally
-        const actualType = type === "transfer" ? "expense" : type;
-
-        // Example payload
-        if (type === "transfer") {
-            console.log({
-                transactionType: actualType,
-                usernameToSendMoney: username,
-                amount,
-                paymentMethod: method,
-                date,
-            });
-        } else {
-            console.log({
-                transactionType: actualType,
-                description,
-                amount,
-                paymentMethod: method,
-                date,
-            });
-        }
-
-        onClose();
-    };
-
     // Friendly title based on the type prop
     let title;
     if (type === "income") {
@@ -73,11 +49,43 @@ export default function TransactionForm({ type, onClose }) {
         title = "Transfer Money";
     }
 
+    const handleAddPayment = async (e) => {
+
+        e.preventDefault();
+
+        //transaction is a expense as well but we need the distinction for the form.
+        const actualtype = type === "transfer" ? "expense" : type;
+
+        const newTransaction = {
+
+            description,
+            username: "John Doe",
+            amount: amount,
+            date: date,
+            type: actualtype,
+            paymentMethod: method,
+        };
+
+        let response;
+        try {
+        response = await(addPayment(newTransaction).unwrap());
+
+            if (response.status === "transaction added successfully") {
+                alert("Payment Added");
+                onClose();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
     return (
         <div className="modal-overlay">
             <div className="modal-container">
                 <h2 className="modal-title">{title}</h2>
-                <form onSubmit={handleSubmit} className="transaction-form">
+                <form onSubmit={(e) => handleAddPayment(e)} className="transaction-form">
                     {/* Conditionally render Description or Username */}
                     {type === "transfer" ? (
                         <div className="form-group">
@@ -144,12 +152,19 @@ export default function TransactionForm({ type, onClose }) {
                         >
                             Cancel
                         </button>
+                        {!isLoading ? (
+
                         <button
                             type="submit"
                             className="submit-btn"
+                            onSubmit={handleAddPayment}
                         >
                             Submit
                         </button>
+                        ) : (
+                            <SmallSpinner/>
+                        )
+                        }
                     </div>
                 </form>
             </div>

@@ -5,7 +5,6 @@ import { FaPlus, FaMinus, FaExchangeAlt } from "react-icons/fa";
 export default function ActionsBar({ onAddIncome, onAddExpense, onTransfer }) {
     return (
         <div className="actions-cards">
-            {/* 1) Add Income Card */}
             <div className="action-card" onClick={onAddIncome}>
                 <div className="action-icon">
                     <FaPlus />
@@ -14,7 +13,6 @@ export default function ActionsBar({ onAddIncome, onAddExpense, onTransfer }) {
                 <p>Create an income manually</p>
             </div>
 
-            {/* 2) Add Expense Card */}
             <div className="action-card" onClick={onAddExpense}>
                 <div className="action-icon">
                     <FaMinus />
@@ -23,7 +21,6 @@ export default function ActionsBar({ onAddIncome, onAddExpense, onTransfer }) {
                 <p>Create an expense manually</p>
             </div>
 
-            {/* 3) Transfer Money Card */}
             <div className="action-card" onClick={onTransfer}>
                 <div className="action-icon">
                     <FaExchangeAlt />

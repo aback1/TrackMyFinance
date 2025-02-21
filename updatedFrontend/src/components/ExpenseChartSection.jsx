@@ -1,14 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useGetTransactionsQuery } from "../features/transaction/transactionApi";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import "../styles/ExpenseChartSection.css";
 
-const chartData = [
-    { name: "House", value: 41.35 },
-    { name: "Car", value: 23.45 },
-    { name: "Food", value: 15.2 },
-    { name: "Other", value: 20.0 },
-];
-
+// 50-color array
 const COLORS = [
     "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A569BD", "#E74C3C", "#1ABC9C",
     "#D35400", "#2ECC71", "#5D6D7E", "#F4D03F", "#DFFF00", "#40E0D0", "#6495ED",
@@ -20,7 +16,80 @@ const COLORS = [
     "#F0E68C"
 ];
 
+// Helper to parse a "dd.mm.yyyy" date string into a Date object.
+const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr.split(".");
+    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+};
+
+// Helper to filter transactions based on the selected period.
+// You can adjust this logic as needed.
+const filterTransactionsByPeriod = (transactions, period) => {
+    if (!transactions) return [];
+    const now = new Date();
+    let startDate;
+    const periodLower = period.toLowerCase();
+
+    if (periodLower === "this month") {
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    } else if (periodLower === "last month") {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const endDate = new Date(now.getFullYear(), now.getMonth(), 0);
+        return transactions.filter((tx) => {
+            const txDate = parseDate(tx.date);
+            return txDate >= startDate && txDate <= endDate;
+        });
+    } else if (periodLower === "last 3 months") {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+    } else if (periodLower === "last 12 months") {
+        startDate = new Date(now.getFullYear() - 1, now.getMonth(), 1);
+    } else {
+        return transactions;
+    }
+
+    return transactions.filter((tx) => parseDate(tx.date) >= startDate);
+};
+
 export default function ExpenseChartSection() {
+    const userName = "John Doe";
+    const { data: transactions, error, isLoading } = useGetTransactionsQuery(userName);
+    const period = useSelector(state => state.transaction.period);
+
+    if (isLoading) {
+        return <div>Loading expense chart...</div>;
+    }
+    if (error) {
+        console.error(error);
+        return <div>Error loading expense data.</div>;
+    }
+
+    // Filter for transactions that are expenses or transfers.
+    const expenseTransactions = transactions.filter(tx => {
+        const typeLower = tx.type.toLowerCase();
+        return typeLower === "expense" || typeLower === "transaction";
+    });
+
+    // Filter expenses based on the selected period.
+    const filteredExpenses = filterTransactionsByPeriod(expenseTransactions, period);
+
+    // Group by description (using the transaction's description)
+    const grouped = filteredExpenses.reduce((acc, tx) => {
+        const desc = tx.description;
+        // Sum the absolute amount (so negative values are treated as positive)
+        const amt = Math.abs(tx.amount);
+        acc[desc] = (acc[desc] || 0) + amt;
+        return acc;
+    }, {});
+
+    // Calculate total expenses in the period.
+    const totalExpense = Object.values(grouped).reduce((acc, val) => acc + val, 0);
+
+    // Create chart data: each entry's value is the percentage of total expense.
+    const chartData = Object.entries(grouped).map(([description, amt]) => {
+        const percentage = totalExpense ? (amt / totalExpense) * 100 : 0;
+        return { name: description, value: parseFloat(percentage.toFixed(1)) };
+    });
+
     return (
         <section className="expense-chart-section">
             <h3>Expenses by category</h3>
@@ -39,7 +108,7 @@ export default function ExpenseChartSection() {
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                     </Pie>
-                    <Tooltip />
+                    <Tooltip formatter={(value, name) => [`${value}%`, name]} />
                 </PieChart>
             </div>
 

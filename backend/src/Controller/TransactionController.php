@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TransactionController extends AbstractController
 {
-    #[Route('/transactions/add', name: 'add_transaction', methods: ['POST'])]
+    #[Route('/api/transactions/add', name: 'add_transaction', methods: ['POST'])]
     public function addTransaction(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -44,38 +44,40 @@ class TransactionController extends AbstractController
 
         return new JsonResponse(["status" => "transaction added successfully"], 201);
     }
-    #[Route('/transactions/get', name: 'get_transactions', methods: ['GET'])]
+    #[Route('/api/transactions/get', name: 'get_transactions', methods: ['GET'])]
     public function getTransactions(
         Request $request,
         EntityManagerInterface $entityManager
     ): JsonResponse {
-        $username = $request->query->get('username');
+        try {
+            $username = $request->query->get('username');
 
-        // Return an error if no username is provided.
-        if (!$username) {
-            return new JsonResponse(['error' => 'Username parameter is required'], 400);
+            // Return an error if no username is provided.
+            if (!$username) {
+                return new JsonResponse(['error' => 'Username parameter is required'], 400);
+            }
+
+            $repository = $entityManager->getRepository(Transaction::class);
+            $transactions = $repository->findBy(['username' => $username]);
+
+            $data = [];
+            foreach ($transactions as $transaction) {
+                $data[] = [
+                    'id' => $transaction->getId(),
+                    'username' => $transaction->getUsername(), // included for clarity
+                    'date' => $transaction->getDate(),
+                    'amount' => $transaction->getAmount(),
+                    'paymentMethod' => $transaction->getPaymentMethod(),
+                    'description' => $transaction->getDescription(),
+                    'type' => $transaction->getType()
+                ];
+            }
+            return new JsonResponse($data, 200, ['Content-Type' => 'application/json']);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
         }
-
-        $repository = $entityManager->getRepository(Transaction::class);
-        $transactions = $repository->findBy(['username' => $username]);
-
-        $data = [];
-        foreach ($transactions as $transaction) {
-            $data[] = [
-                'id' => $transaction->getId(),
-                'username' => $transaction->getUsername(), // included for clarity
-                'date' => $transaction->getDate(),
-                'amount' => $transaction->getAmount(),
-                'paymentMethod' => $transaction->getPaymentMethod(),
-                'description' => $transaction->getDescription(),
-                'type' => $transaction->getType()
-            ];
-        }
-
-        return new JsonResponse($data, 200);
     }
-
-    #[Route('/transactions/delete', name: 'delete_transaction', methods: ['DELETE'])]
+    #[Route('/api/transactions/delete', name: 'delete_transaction', methods: ['DELETE'])]
         public function deleteTransaction(
             Request $request,
             EntityManagerInterface $entityManager,
