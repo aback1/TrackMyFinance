@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/TransactionForm.css";
-import {useAddTransactionMutation} from "../features/transaction/transactionApi.js";
+import { useAddTransactionMutation } from "../features/transaction/transactionApi.js";
 import SmallSpinner from "./SmallSpinner.jsx";
 
 export default function TransactionForm({ type, onClose }) {
@@ -8,119 +8,83 @@ export default function TransactionForm({ type, onClose }) {
     const [method, setMethod] = useState("credit card");
     const [date, setDate] = useState("");
     const userName = "John Doe";
-    const [addPayment, {error, isLoading}] = useAddTransactionMutation(userName);
-
-    // For description (income/expense) or username (transfer)
+    const [addPayment, { error, isLoading }] = useAddTransactionMutation(userName);
     const [description, setDescription] = useState("");
     const [username, setUsername] = useState("");
 
-    // format "13022024" -> "13.02.2024"
     const formatDateInput = (value) => {
         const digits = value.replace(/\D/g, "");
-
         let day = digits.substring(0, 2);
         let month = digits.substring(2, 4);
         let year = digits.substring(4, 8);
-
-        let formatted = "";
-        if (day) {
-            formatted += day;
-        }
-        if (month) {
-            formatted += "." + month;
-        }
-        if (year) {
-            formatted += "." + year;
-        }
-        return formatted;
+        return `${day}${month ? "." + month : ""}${year ? "." + year : ""}`;
     };
 
-    const handleDateChange = (e) => {
-        setDate(formatDateInput(e.target.value));
-    };
+    const handleDateChange = (e) => setDate(formatDateInput(e.target.value));
 
-    // Friendly title based on the type prop
-    let title;
-    if (type === "income") {
-        title = "Add Income";
-    } else if (type === "expense") {
-        title = "Add Expense";
-    } else if (type === "transfer") {
-        title = "Transfer Money";
-    }
+    let title = type === "income" ? "Add Income" : type === "expense" ? "Add Expense" : "Transfer Money";
+
+    const handleAddTransaction = async (e) => {
+        e.preventDefault();
+        try {
+            const newTransferFrom = { description: `To ${username}`, username: userName, amount, date, type: "expense", paymentMethod: method };
+            const response = await addPayment(newTransferFrom).unwrap();
+            if (response.status === "transaction added successfully") {
+                const newTransferTo = { description: `From ${userName}`, username, amount, date, type: "income", paymentMethod: method };
+                const responseTo = await addPayment(newTransferTo).unwrap();
+                if (responseTo.status === "transaction added successfully") {
+                    alert(`Transfer to ${username} was successful`);
+                    onClose();
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleAddPayment = async (e) => {
-
         e.preventDefault();
-
-        //transaction is a expense as well but we need the distinction for the form.
-        const actualtype = type === "transfer" ? "expense" : type;
-
-        const newTransaction = {
-
-            description,
-            username: "John Doe",
-            amount: amount,
-            date: date,
-            type: actualtype,
-            paymentMethod: method,
-        };
-
-        let response;
         try {
-        response = await(addPayment(newTransaction).unwrap());
-
+            const newTransaction = { description, username: "John Doe", amount, date, type, paymentMethod: method };
+            const response = await addPayment(newTransaction).unwrap();
             if (response.status === "transaction added successfully") {
                 alert("Payment Added");
                 onClose();
             }
-
         } catch (error) {
             console.log(error);
         }
+    };
 
-    }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (type === "transfer") {
+            handleAddTransaction(e);
+        } else {
+            handleAddPayment(e);
+        }
+    };
 
     return (
         <div className="modal-overlay">
             <div className="modal-container">
                 <h2 className="modal-title">{title}</h2>
-                <form onSubmit={(e) => handleAddPayment(e)} className="transaction-form">
-                    {/* Conditionally render Description or Username */}
+                <form onSubmit={handleSubmit} className="transaction-form">
                     {type === "transfer" ? (
                         <div className="form-group">
                             <label>Username</label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Enter username to send money"
-                            />
+                            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username to send money" />
                         </div>
                     ) : (
                         <div className="form-group">
                             <label>Description</label>
-                            <input
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Enter description"
-                            />
+                            <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Enter description" />
                         </div>
                     )}
-
-                    {/* Amount */}
                     <div className="form-group">
                         <label>Amount</label>
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            placeholder="Enter amount"
-                        />
+                        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount" />
                     </div>
-
-                    {/* Payment Method */}
                     <div className="form-group">
                         <label>Payment Method</label>
                         <select value={method} onChange={(e) => setMethod(e.target.value)}>
@@ -130,41 +94,17 @@ export default function TransactionForm({ type, onClose }) {
                             <option value="cash">Cash</option>
                         </select>
                     </div>
-
-                    {/* Date */}
                     <div className="form-group">
                         <label>Date</label>
-                        <input
-                            type="text"
-                            value={date}
-                            onChange={handleDateChange}
-                            placeholder="dd.mm.yyyy"
-                            maxLength={10}
-                        />
+                        <input type="text" value={date} onChange={handleDateChange} placeholder="dd.mm.yyyy" maxLength={10} />
                     </div>
-
-                    {/* Buttons */}
                     <div className="button-row">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="cancel-btn"
-                        >
-                            Cancel
-                        </button>
+                        <button type="button" onClick={onClose} className="cancel-btn">Cancel</button>
                         {!isLoading ? (
-
-                        <button
-                            type="submit"
-                            className="submit-btn"
-                            onSubmit={handleAddPayment}
-                        >
-                            Submit
-                        </button>
+                            <button type="submit" className="submit-btn">Submit</button>
                         ) : (
-                            <SmallSpinner/>
-                        )
-                        }
+                            <SmallSpinner />
+                        )}
                     </div>
                 </form>
             </div>

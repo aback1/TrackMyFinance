@@ -1,0 +1,45 @@
+.transaction-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.balance {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.transactions {
+    width: 100%; /* Takes up 60% of the screen */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center items inside */
+}
+
+.transaction-item {
+    width: 100%; /* Make sure it stays within 60% */
+    max-width: 60%; /* Prevent overflow */
+    padding: 15px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.show-more-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.show-more-button:hover {
+    background: #0056b3;
+}

@@ -1,0 +1,61 @@
+.contact-info-container {
+    background-color: #fff;
+    max-width: 600px; /* Container width */
+    margin: 40px auto; /* Center horizontally and add spacing on top/bottom */
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.contact-info-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Spacing between form groups */
+}
+
+.form-row {
+    display: flex;
+    gap: 16px; /* Spacing between first/last name fields */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* So each group in a row has equal width */
+}
+
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+}
+
+.submit-btn {
+    align-self: flex-start;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}

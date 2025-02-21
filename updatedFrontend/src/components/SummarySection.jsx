@@ -95,7 +95,7 @@ export default function SummarySection() {
         },
         {
             id: 2,
-            title: "Incomes",
+            title: "Income",
             amount: formatCurrency(currentTotals.income),
             comparison: showComparison ? incomeComparison + " from last month" : "",
             comparisonType: incomeComparison.startsWith("-") ? "negative" : "positive",

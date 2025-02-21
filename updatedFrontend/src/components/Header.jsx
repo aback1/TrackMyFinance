@@ -1,17 +1,22 @@
 import React from "react";
 import "../styles/Header.css";
 import { FaBell, FaCog } from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
+import Button from "./Button.jsx";
 
 export default function Header() {
+
+    const navigate = useNavigate();
+
     return (
         <header className="header">
             <div className="header-left">
                 <div className="logo">TrackMyFinance</div>
                 <nav>
                     <ul className="nav-list">
-                        <li><a href="#overview">Overview</a></li>
-                        <li><a href="#transactions">Transactions</a></li>
-                        <li><a href="#accounts">Accounts</a></li>
+                        <li onClick={() => navigate("/")}><a>Overview</a></li>
+                        <li onClick={() => navigate("/transactions")}><a>Transactions</a></li>
+                        <li onClick={() => navigate("/account")}><a>Account</a></li>
                     </ul>
                 </nav>
             </div>
