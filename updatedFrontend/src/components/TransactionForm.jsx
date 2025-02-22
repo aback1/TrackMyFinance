@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import "../styles/TransactionForm.css";
 import { useAddTransactionMutation } from "../features/transaction/transactionApi.js";
 import SmallSpinner from "./SmallSpinner.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {addNotification} from "../features/notification/notificationSlice.js";
+import {v4 as uuid} from "uuid";
+
 
 export default function TransactionForm({ type, onClose }) {
     const [amount, setAmount] = useState("");
+    const userName = useSelector((state) => state.login.userName) || "";
     const [method, setMethod] = useState("credit card");
     const [date, setDate] = useState("");
-    const userName = "John Doe";
     const [addPayment, { error, isLoading }] = useAddTransactionMutation(userName);
     const [description, setDescription] = useState("");
     const [username, setUsername] = useState("");
+    const dispatch = useDispatch();
 
     const formatDateInput = (value) => {
         const digits = value.replace(/\D/g, "");
@@ -34,6 +39,9 @@ export default function TransactionForm({ type, onClose }) {
                 const responseTo = await addPayment(newTransferTo).unwrap();
                 if (responseTo.status === "transaction added successfully") {
                     alert(`Transfer to ${username} was successful`);
+                    dispatch(addNotification({
+                        id: uuid(), text: "Transfer successful"
+                    }));
                     onClose();
                 }
             }
@@ -45,10 +53,11 @@ export default function TransactionForm({ type, onClose }) {
     const handleAddPayment = async (e) => {
         e.preventDefault();
         try {
-            const newTransaction = { description, username: "John Doe", amount, date, type, paymentMethod: method };
+            const newTransaction = { description, username: userName, amount, date, type, paymentMethod: method };
             const response = await addPayment(newTransaction).unwrap();
             if (response.status === "transaction added successfully") {
                 alert("Payment Added");
+                dispatch(addNotification({id: uuid(), text: "Payment Added"}));
                 onClose();
             }
         } catch (error) {

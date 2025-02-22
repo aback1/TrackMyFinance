@@ -51,7 +51,7 @@ const filterTransactionsByPeriod = (transactions, period) => {
 };
 
 export default function ExpenseChartSection() {
-    const userName = "John Doe";
+    const userName = useSelector((state) => state.login.userName) || "";
     const { data: transactions, error, isLoading } = useGetTransactionsQuery(userName);
     const period = useSelector(state => state.transaction.period);
 

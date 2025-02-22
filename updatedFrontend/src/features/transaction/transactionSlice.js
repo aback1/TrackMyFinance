@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    currency: "USD",
+    currency: "EUR",
     period: "this month",
     useFirstNameForGreeting: false,
     userName: "John Doe",

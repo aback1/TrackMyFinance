@@ -26,7 +26,7 @@
 }
 
 li {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .nav-list a {
@@ -63,4 +63,205 @@ li {
     font-weight: 600;
     color: #fff;
     cursor: pointer;
+}
+
+/* New Notification Styles */
+.notification-tab {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.notification-tab::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.notification-tab {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    margin-top: 20px;/* Firefox */
+}
+
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item p {
+    margin: 0;
+    flex: 1;
+}
+
+.notification-item button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+.currency-tab {
+    position: absolute;
+    top: 60px; /* Adjust based on your header height */
+    right: 70px; /* Adjust to position near the cog icon */
+    width: 150px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.currency-header {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.currency-dropdown {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.currency-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.currency-dropdown li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Existing Notification Styles remain unchanged */
+.notification-tab {
+    position: absolute;
+    top: 60px; /* Adjust based on your header height */
+    right: 10px;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Hide scrollbar for WebKit browsers */
+.notification-tab::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.notification-tab {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item p {
+    margin: 0;
+    flex: 1;
+}
+
+.notification-item button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+}
+
+.user-menu-container {
+    position: absolute;
+    top: 85px;
+    right: 10px;
+    width: 300px;
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    z-index: 1000;
+}
+.user-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-menu .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-menu .login-form input {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.user-menu .login-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.user-menu .login-buttons button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.user-menu .logout-button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.user-menu-container {
+    position: absolute;
+    top: 60px;      /* Position it right below the header */
+    right: 10px;    /* Align it to the right under the icons */
+    width: 300px;   /* Fixed width */
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    z-index: 1000;
 }

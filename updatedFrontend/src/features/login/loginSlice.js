@@ -23,8 +23,12 @@ export const loginSlice = createSlice({
         setIsLoggedIn: (state, action) => {
             state.isLoggedIn = action.payload;
         },
-        logout: () => {
-            return initialState;
+        logout: (state) => {
+            state.showLoginForm = true;
+            state.userName = "";
+            state.password = "";
+            state.isLoggedIn = false;
+
         },
     },
 });

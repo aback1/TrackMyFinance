@@ -19,7 +19,14 @@ const filterTransactionsForMonth = (transactions, year, month) => {
 };
 
 // Utility to format numbers as currency
-const formatCurrency = (num) => "$" + num.toFixed(2);
+// If currency is USD, multiply by 1.05 and prepend "$"
+// Otherwise, use the EUR value and prepend "€"
+const formatCurrency = (num, currency) => {
+    if (currency === "USD") {
+        return "$" + (num * 1.05).toFixed(2);
+    }
+    return "€" + num.toFixed(2);
+};
 
 // Utility to calculate percentage difference
 const calculatePercentageDifference = (current, previous) => {
@@ -29,9 +36,11 @@ const calculatePercentageDifference = (current, previous) => {
 };
 
 export default function SummarySection() {
-    const userName = "John Doe";
+    const userName = useSelector((state) => state.login.userName) || "";
+
     const { data: transactions, error, isLoading } = useGetTransactionsQuery(userName);
     const period = useSelector((state) => state.transaction.period);
+    const currency = useSelector((state) => state.transaction.currency);
 
     if (isLoading) {
         return <div>Loading summary...</div>;
@@ -84,26 +93,26 @@ export default function SummarySection() {
     const expenseComparison = showComparison ? calculatePercentageDifference(currentTotals.expense, lastTotals.expense) : "";
     const balanceComparison = showComparison ? calculatePercentageDifference(balance, lastMonthBalance) : "";
 
-    // Build summary data
+    // Build summary data using our new formatCurrency function
     const summaryData = [
         {
             id: 1,
             title: "Balance",
-            amount: formatCurrency(balance),
+            amount: formatCurrency(balance, currency),
             comparison: showComparison ? balanceComparison + " from last month" : "",
             comparisonType: balanceComparison.startsWith("-") ? "negative" : "positive",
         },
         {
             id: 2,
             title: "Income",
-            amount: formatCurrency(currentTotals.income),
+            amount: formatCurrency(currentTotals.income, currency),
             comparison: showComparison ? incomeComparison + " from last month" : "",
             comparisonType: incomeComparison.startsWith("-") ? "negative" : "positive",
         },
         {
             id: 3,
             title: "Expenses",
-            amount: formatCurrency(currentTotals.expense),
+            amount: formatCurrency(currentTotals.expense, currency),
             comparison: showComparison ? expenseComparison + " from last month" : "",
             comparisonType: expenseComparison.startsWith("-") ? "positive" : "negative",
         },

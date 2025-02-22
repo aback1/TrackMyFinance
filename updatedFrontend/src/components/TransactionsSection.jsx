@@ -48,7 +48,7 @@ const filterTransactionsByPeriod = (transactions, period) => {
 };
 
 export default function TransactionsSection() {
-    const userName = "John Doe";
+    const userName = useSelector((state) => state.login.userName) || "";
     const { data: TransactionData, error, isLoading } = useGetTransactionsQuery(userName);
     const period = useSelector(state => state.transaction.period);
 

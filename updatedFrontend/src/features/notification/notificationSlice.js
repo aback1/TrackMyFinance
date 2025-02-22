@@ -13,7 +13,7 @@ export const notificationSlice = createSlice({
             state.notifications.push(action.payload);
         },
         deleteNotification: (state, action) => {
-            state.notifications.filter((notification) => notification.id !== action.payload);
+           state.notifications = state.notifications.filter((notification) => notification.id !== action.payload);
         }
     }
 });
@@ -21,6 +21,6 @@ export const notificationSlice = createSlice({
 export const {
     addNotification,
     deleteNotification
-} = loginSlice.actions;
+} = notificationSlice.actions;
 
 export default notificationSlice.reducer;
