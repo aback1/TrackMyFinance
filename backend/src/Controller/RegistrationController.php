@@ -32,7 +32,7 @@ class RegistrationController extends AbstractController
 
         // Create and populate the user
         $user = new User();
-        $user->setUsername($data["username"]);
+        $user->setName($data["username"]);
 
         // Hash the password
         $hashedPassword = $passwordHasher->hashPassword($user, $data["password"]);

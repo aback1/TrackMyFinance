@@ -51,6 +51,7 @@ security:
             - { path: ^/transactions, roles: PUBLIC_ACCESS }
             - { path: ^/register, roles: PUBLIC_ACCESS }
             - { path: ^/movie, roles: PUBLIC_ACCESS }
+            - { path: ^/userinformation, roles: PUBLIC_ACCESS }
             - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

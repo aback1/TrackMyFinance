@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
-    #[Route('/userinformation/update', name: 'user_data', methods: ['POST'])]
+    #[Route('/userinformation/post', name: 'post_user_data', methods: ['POST'])]
     public function updateUserInformation(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -22,19 +22,19 @@ class UserController extends AbstractController
 
         //Check if all the required fields are entered in the request object
         $data = json_decode($request->getContent(), true);
-        if (!$data || !isset($data["username"])) {
+        if (!$data || !isset($data["name"])) {
             return new JsonResponse(["error" => "Missing required fields"], 400);
             }
 
         // Fetch the user from the database
-        $user = $entityManager->getRepository(User::class)->find($data["username"]);
+        $user = $entityManager->getRepository(User::class)->find($data["name"]);
         if (!$user) {
             return new JsonResponse(["error" => "User not found"], 404);
         }
 
 
-        $user->setFirstName($data["firstname"]);
-        $user->setLastName($data["lastname"]);
+        $user->setFirstname($data["firstname"]);
+        $user->setLastname($data["lastname"]);
         $user->setEmail($data["email"]);
         $user->setPhonenumber($data["phonenumber"]);
         $user->setAddress($data["address"]);
@@ -55,22 +55,32 @@ class UserController extends AbstractController
 
     }
 
-    #[Route('/userinformation/get', name: 'user_data', methods: ['GET'])]
+    #[Route('/userinformation/get', name: 'get_user_data', methods: ['GET'])]
     public function getUserInformation(
         Request $request,
         EntityManagerInterface $entityManager,
     ) : JsonResponse {
-        $username = $request->get("username");
-        $repository = $entityManager->getRepository(User::class);
+        $name = $request->get('name');
 
-        if($username) {
-            $transactions = $repository->findBy(["username" => $username]);
+        if($name) {
+
+            $repository = $entityManager->getRepository(User::class);
+            $user = $repository->findOneBy(['name' => $name]);
+            $data = [];
+
+            $data[] = [
+                "firstname" => $user->getFirstname(),
+                "lastname" => $user->getLastname(),
+                "email" => $user->getEmail(),
+                "phoneNumber" => $user->getPhonenumber(),
+                "address"=> $user->getAddress(),
+            ];
+            return new JsonResponse($data, 200, ['Content-Type' => 'application/json']);
         } else {
-            $transactions = $repository->findAll();
+            return new JsonResponse(["error" => "No Username provided"], 404);
         }
 
     }
-
 
 
 }

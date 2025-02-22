@@ -2,18 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 
 #[ORM\Entity]
+#[ApiResource]
 #[ORM\Table(name: 'users')]
-class User implements  PasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: ["name"], message: "this username is already taken.")]
+class User implements  PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 16, unique: true)]
-    private string $username;
+    private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $password;
@@ -37,14 +42,14 @@ class User implements  PasswordAuthenticatedUserInterface
 
     // Getters and Setters
 
-    public function getUsername(): string
+    public function getName(): string
     {
-        return $this->username;
+        return $this->name;
     }
 
-    public function setUsername(string $username): static
+    public function setName(string $username): static
     {
-        $this->username = $username;
+        $this->name = $username;
         return $this;
     }
     public function getPassword(): string
@@ -112,6 +117,22 @@ class User implements  PasswordAuthenticatedUserInterface
         $this->address = $address;
         return $this;
     }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If we need to erase sensitive user data
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->name;
+    }
+
 
 
 }
